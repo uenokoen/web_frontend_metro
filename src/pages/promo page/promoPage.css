@@ -1,0 +1,24 @@
+.promo-page {
+    padding: 50px 20px;
+    background: white;
+}
+
+.promo-header h1 {
+    color: var(--buttonColor);
+}
+
+.promo-header p {
+    color: var(--textColor);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.route-card {
+    background: linear-gradient(135deg, #f7f7f7, #e0e0e0);
+    width: 350px;
+    height: 230px;
+}
+
+.route-card:hover {
+    transform: translateY(-5px);
+}

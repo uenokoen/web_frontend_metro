@@ -1,0 +1,42 @@
+footer {
+    background-color: var(--footerColor); /* Темный фон футера */
+    color: #fff; /* Белый текст */
+    padding: 20px; /* Отступы */
+    margin-top: auto; /* Для прилипания к низу страницы */
+    width: 100%; /* Ширина на 100% */
+}
+
+footer a {
+    text-decoration: none;
+}
+.text-down {
+    font-size: 10px;
+}
+
+footer img {
+    width: 30px; /* Размер иконок */
+    height: 30px;
+    transition: transform 0.2s ease;
+}
+
+footer img:hover {
+    transform: scale(1.1); /* Увеличение иконок при наведении */
+}
+
+@media (max-width: 768px) {
+    footer h6 {
+        text-align: center; /* Выравнивание имени по центру на маленьких экранах */
+    }
+    .text-dowm {
+        font-size: 5px;
+    }
+}
+
+.footer-text text {
+    font-size: 16px;
+    color: white;
+}
+
+.footer-image {
+    width: 50px;
+}
