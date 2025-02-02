@@ -26,7 +26,8 @@ function RouteList() {
     const { searchRouteTerm, routes, loading, error } = useSelector((state: RootState) => state.routes);
 
     useEffect(() => {
-        dispatch(getRoutesList());
+        dispatch(getRoutesList())
+
     }, [dispatch]);
 
     return (

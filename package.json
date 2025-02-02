@@ -14,6 +14,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "framer-motion": "^11.18.0",
     "gh-pages": "^6.3.0",
     "js-cookie": "^3.0.5",

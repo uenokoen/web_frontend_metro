@@ -17,7 +17,22 @@ export interface RoutePic {
    * @format uri
    * @maxLength 200
    */
-  thumbnail?: string | null;
+  image?: File | null;
+}
+
+export interface RouteEdit {
+    origin?: string;
+    destination?: string;
+    description?: string;
+    price?: number;
+    is_active: boolean;
+}
+
+export interface RouteCreate {
+    origin?: string;
+    destination?: string;
+    description?: string;
+    price?: number;
 }
 
 export interface UserAuth {
@@ -359,10 +374,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/routes/
      * @secure
      */
-    routesCreate: (params: RequestParams = {}) =>
+    routesCreate: (data: RouteCreate,params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/routes/`,
         method: "POST",
+        body: data,
         secure: true,
         ...params,
       }),
@@ -391,10 +407,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/routes/{route_id}/
      * @secure
      */
-    routesUpdate: (routeId: string, params: RequestParams = {}) =>
+    routesUpdate: (routeId: string,data: RouteEdit, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/routes/${routeId}/`,
         method: "PUT",
+        body: data,
         secure: true,
         ...params,
       }),
@@ -440,16 +457,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/routes/{route_id}/image/
      * @secure
      */
-    routesImageCreate: (routeId: string, data: RoutePic, params: RequestParams = {}) =>
-      this.request<RoutePic, any>({
-        path: `/routes/${routeId}/image/`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+    routesImageCreate: (routeId: string, data: FormData, params: RequestParams = {}) =>
+        this.request<FormData, any>({
+            path: `/routes/${routeId}/image/`,
+            method: "POST",
+            body: data,  // передаем FormData
+            secure: true,
+            type: ContentType.FormData,  // указываем правильный тип
+            format: "json",
+            ...params,
+        }),
 
     /**
      * No description
@@ -484,6 +501,80 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
+  attributes = {
+      /**
+       * No description
+       *
+       * @tags trips
+       * @name AttributesRead
+       * @request GET:/routes/{object_id}/attributes
+       * @secure
+       */
+      attributesRead: (object_id: string, params: RequestParams = {}) =>
+          this.request<void, any>({
+              path: `/routes/${object_id}/attributes/`,
+              method: "GET",
+              secure: true,
+              ...params,
+          }),
+      /**
+       * No description
+       *
+       * @tags trips
+       * @name AttributesCreate
+       * @request GET:/routes/{object_id}/attributes
+       * @secure
+       */
+      attributesCreate: (object_id: string,body: {
+          attribute_name: string,
+          attribute_value: string,
+      }, params: RequestParams = {}) =>
+          this.request<void, any>({
+              path: `/routes/${object_id}/attributes/`,
+              method: "POST",
+              body: body,
+              secure: true,
+              ...params,
+          }),
+      /**
+       * No description
+       *
+       * @tags trips
+       * @name AttributesDelete
+       * @request GET:/routes/{object_id}/attributes
+       * @secure
+       */
+      attributesDelete: (object_id: string,body: {
+          attribute_name: string,
+      }, params: RequestParams = {}) =>
+          this.request<void, any>({
+              path: `/routes/${object_id}/attributes/`,
+              method: "DELETE",
+              body: body,
+              secure: true,
+              ...params,
+          }),
+      /**
+       * No description
+       *
+       * @tags trips
+       * @name AttributesEdit
+       * @request GET:/routes/{object_id}/attributes
+       * @secure
+       */
+      attributesEdit: (object_id: string,body: {
+          attribute_name: string,
+          new_value: string,
+      }, params: RequestParams = {}) =>
+          this.request<void, any>({
+              path: `/routes/${object_id}/attributes/`,
+              method: "PUT",
+              body: body,
+              secure: true,
+              ...params,
+          }),
+  }
+
   trips = {
     /**
      * No description
@@ -493,10 +584,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/trips/
      * @secure
      */
-    tripsList: (params: RequestParams = {}) =>
+    tripsList: (filters: {start_date: string; end_date: string; status: string}
+        ,params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/trips/`,
         method: "GET",
+        query: filters,
         secure: true,
         ...params,
       }),
@@ -562,10 +655,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/trips/{trip_id}/finish/
      * @secure
      */
-    tripsFinishCreate: (tripId: string, params: RequestParams = {}) =>
+    tripsFinishCreate: (tripId: string,action: string,params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/trips/${tripId}/finish/`,
         method: "POST",
+        body: action,
         secure: true,
         ...params,
       }),

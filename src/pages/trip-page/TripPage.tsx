@@ -39,7 +39,6 @@ const CartPage = () => {
         const routeId = e.target.getAttribute('data-route-id'); // Получаем ID маршрута
 
         if (routeId) {
-            // Обновляем состояние в Redux
             dispatch(
                 setRouteInTripData({
                     routeId: parseInt(routeId, 10), // Преобразуем routeId в число
@@ -134,9 +133,16 @@ const CartPage = () => {
     useEffect(() => {
         // Если id уже есть, загружаем поездку
         if (id) {
-            dispatch(getTrip(id));
+            dispatch(getTrip(id))
+                .unwrap() // Если используешь redux-thunk с unwrap, можно обработать успешный и ошибочный результат
+                .catch(() => {
+                    navigate('/not-found');
+                });
+        } else {
+            navigate('/not-found');
         }
-    }, [dispatch, id]);
+    }, [dispatch, id, navigate]);
+
 
     if (loading) {
         return (
@@ -232,6 +238,7 @@ const CartPage = () => {
                                 placeholder="Введите имя владельца поездки"
                                 value={tripData.owner ?? ''}
                                 onChange={handleInputChange}
+                                className={'form-auth'}
                                 disabled={!isDraft}// Обработчик изменения
                             />
                         </Form.Group>
@@ -242,6 +249,7 @@ const CartPage = () => {
                                 name="name"
                                 placeholder="Введите название поездки"
                                 value={tripData.name ?? ''}
+                                className={'form-auth'}
                                 onChange={handleInputChange}
                                 disabled={!isDraft}// Обработчик изменения
                             />
@@ -253,6 +261,7 @@ const CartPage = () => {
                                 name="description"
                                 placeholder="Введите цель поездки"
                                 value={tripData.description ?? ''}
+                                className={'form-auth'}
                                 onChange={handleInputChange}
                                 disabled={!isDraft}
                             />

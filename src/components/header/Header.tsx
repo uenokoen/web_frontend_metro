@@ -18,6 +18,7 @@ function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const isAuthenticated = useSelector((state: RootState) => state.users.isAuthenticated);
+    const isSuperUser = useSelector((state: RootState) => state.users.is_superuser)
     const username = useSelector((state: RootState) => state.users.username);
     const email = useSelector((state: RootState) => state.users.email);
     const last_name = useSelector((state: RootState) => state.users.last_name);
@@ -80,6 +81,11 @@ function Header() {
                             {(isAuthenticated == true) && (
                                 <Nav.Link as={Link} to="/trips">
                                     Поездки
+                                </Nav.Link>
+                            )}
+                            {(isAuthenticated == true ) && (isSuperUser == true) &&(
+                                <Nav.Link as={Link} to="/updateroute">
+                                    Список маршрутов
                                 </Nav.Link>
                             )}
                             {(isAuthenticated == false ) && (
@@ -145,11 +151,28 @@ function Header() {
             >
                 <motion.div className="menu-content">
                     <Nav className="flex-column gap-3 align-items-start">
-                        <Nav.Link as={Link} to="/routes" onClick={toggleMenu}>
+                        <Nav.Link as={Link} to="/routes" onClick={toggleMenu} >
                             Маршруты
                         </Nav.Link>
+
+                        {(isAuthenticated == true) && (
+                            <Nav.Link as={Link} to="/trips" onClick={() => {
+                                toggleMenu();
+                            }}>
+                                Поездки
+                            </Nav.Link>
+                        )}
+                        {(isAuthenticated == true ) && (isSuperUser == true) &&(
+                            <Nav.Link as={Link} to="/updateroute" onClick={() => {
+                                toggleMenu();
+                            }}>
+                                Список маршрутов
+                            </Nav.Link>
+                        )}
                         {(isAuthenticated == false ) &&  (
-                            <Nav.Link as={Link} to="/login" onClick={toggleMenu}>
+                            <Nav.Link as={Link} to="/login" onClick={() => {
+                                toggleMenu();
+                            }}>
                                 Войти
                             </Nav.Link>
                         )}
@@ -161,7 +184,12 @@ function Header() {
                                 Выйти
                             </Nav.Link>
                         )}
-
+                        {(isAuthenticated == false ) && (
+                            <Nav.Link as={Link} to="/reg" onClick={() => {
+                                toggleMenu();}}>
+                                Регистрация
+                            </Nav.Link>
+                        )}
                     </Nav>
                 </motion.div>
             </motion.div>

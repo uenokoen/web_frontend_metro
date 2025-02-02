@@ -4,10 +4,10 @@ import SearchImg from '../../assets/search.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import {getRoutesList, setSearchRouteTerm} from '../../../routeSlice.ts';
 import {AppDispatch, RootState} from "../../../store.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ShopImg from '../../assets/shopping-bag.svg'
 import React from "react";
-import {deleteTrip, getTrip, setError} from "../../../tripDraftSlice.ts";
+import {getTrip} from "../../../tripDraftSlice.ts";
 interface Props {
     value: string
     loading?: boolean
@@ -19,7 +19,6 @@ function Search({ value, loading }: Props) {
     const id = useSelector((state: RootState) => state.tripDraft.id);
     const count = useSelector((state: RootState) => state.tripDraft.route_count);
     const navigate = useNavigate()
-
     const handleClick = async (e: React.FormEvent) => {
         e.preventDefault();
         if (id) {
@@ -51,6 +50,7 @@ function Search({ value, loading }: Props) {
                     <Button variant="danger"
                             className="custom-button-shop"
                             onClick={handleClick}
+                            disabled={!id}
                     >
                         <img src={ShopImg} className={'w-100'} alt={'ShopImg'}/>
                     </Button>

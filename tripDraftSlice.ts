@@ -58,14 +58,6 @@ const initialState: DraftRouteState = {
 
 // Асинхронные действия (Thunks)
 
-export const getTrips = createAsyncThunk(
-    'trips/getTrips',
-    async () => {
-        const response = await api.trips.tripsList(); // Используем параметры запроса
-        return response.data;
-    }
-);
-
 export const getTrip = createAsyncThunk(
     'trip/getTrip',
     async (id: string) => {
@@ -109,9 +101,7 @@ export const updateRouteInTrip = createAsyncThunk(
         const routeDatatoSend = {
             free: data.free ?? false
         };
-        console.log('Данные для отправки (updateTrip):', data); // Логируем данные
         const response = await api.routes.routesTripUpdate(id,routeDatatoSend);
-        console.log('Ответ от сервера (updateTrip):', response.data); // Логируем ответ
         return response.data;
     }
 );
@@ -165,6 +155,12 @@ const tripDraftSlice = createSlice({
         setRoutes: (state, action) => {
             state.routetrip_set = action.payload;
         },
+        resetId(state) {
+            state.id = NaN;
+        },
+        resetRouteCount(state) {
+            state.route_count = NaN;
+        },
 
     },
     extraReducers: (builder) => {
@@ -182,6 +178,8 @@ const tripDraftSlice = createSlice({
                 state.tripData.description = trip.description;
                 state.tripData.owner = trip.owner;
                 state.isDraft = trip.status === 'DRAFT';
+                state.id = trip.id;
+                state.route_count = trip.route_count;
             })
             .addCase(getTrip.rejected, (state, action) => {
                 state.loading = false;
@@ -274,5 +272,5 @@ const tripDraftSlice = createSlice({
 });
 
 // Экспортируем действия и редюсер
-export const { setId, setRouteCount,setError,setTripData ,setRouteInTripData,setRoutes} = tripDraftSlice.actions;
+export const { setId, setRouteCount,setError,setTripData ,setRouteInTripData,setRoutes,resetRouteCount,resetId} = tripDraftSlice.actions;
 export default tripDraftSlice.reducer;

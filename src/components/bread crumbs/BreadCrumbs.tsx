@@ -10,46 +10,74 @@ function Breadcrumbs() {
     const location = useLocation(); // Хук для получения текущего пути
 
     useEffect(() => {
-        if (id && location.pathname.includes('/routes/')) { // Если мы на странице маршрута
-            api.routes.routesRead(id)
-                .then((response) => {
-                    const data = response.data;
-                    if (data && data.origin && data.destination) {
-                        setRouteName(`${data.origin} - ${data.destination}`);
-                    }
-                })
-                .catch((err) => {
-                    console.error("Ошибка загрузки маршрута:", err);
-                });
-        } else if (id && location.pathname.includes('/trips/')) { // Если мы на странице поездки
-            setTripName(`Поездка №${id}`); // Пример: Поездка №123
+        console.log("Effect triggered", id, location.pathname);
+        if (id) {
+            // Если мы на странице маршрута
+            if (location.pathname.includes('/routes/')) {
+                api.routes.routesRead(id)
+                    .then((response) => {
+                        const data = response.data;
+                        if (data && data.origin && data.destination) {
+                            setRouteName(`${data.origin} - ${data.destination}`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Ошибка загрузки маршрута:", err);
+                    });
+            }
+            // Если мы на странице поездки
+            else if (location.pathname.includes('/trips/')) {
+                setTripName(`Поездка №${id}`); // Пример: Поездка №123
+            }
         } else {
-            setRouteName(""); // Очищаем имя маршрута для страницы списка
-            setTripName(""); // Очищаем название поездки для других страниц
+
+            setRouteName("");
+            setTripName("");
         }
     }, [id, location]);
 
     return (
         <nav aria-label="breadcrumb" className="breadcrumbs">
             <ul className="breadcrumb">
+                {/* Главная */}
                 <li className="breadcrumb-item">
                     <Link to="/">Главная</Link>
                 </li>
+
+                {/* Для маршрутов */}
                 {location.pathname.includes('/routes') && (
                     <li className="breadcrumb-item">
                         <Link to="/routes">Маршруты</Link>
                     </li>
                 )}
+
+                {/* Для поездок */}
                 {location.pathname.includes('/trips') && (
                     <li className="breadcrumb-item">
                         <Link to="/trips">Поездки</Link>
                     </li>
                 )}
-                {location.pathname.includes('/user') && (
-                    <li className="breadcrumb-item" aria-current="page">
-                        <Link to="/user">Личный кабинет</Link>
+
+                {location.pathname.includes('/updateroute') || location.pathname.includes('/editroute') || location.pathname.includes('/createroute')  ? (
+                    <li className="breadcrumb-item">
+                        <Link to="/updateroute">Список маршрутов</Link>
+                    </li>
+                ) : null}
+
+                {/* Редактирование маршрута */}
+                {location.pathname.includes('/editroute') && (
+                    <li className="breadcrumb-item active" aria-current="page">
+                        Редактирование маршрута
                     </li>
                 )}
+
+                {location.pathname.includes('/createroute') && (
+                    <li className="breadcrumb-item active" aria-current="page">
+                        Создание маршрута
+                    </li>
+                )}
+
+                {/* Заголовок активной страницы */}
                 {location.pathname.includes('/routes/') && id && (
                     <li className="breadcrumb-item active" aria-current="page">
                         {routeName || "Загрузка маршрута..."}

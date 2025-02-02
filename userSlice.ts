@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '/src/api';
 import {UserRegistration} from "./src/api/Api.ts";
+import {resetId,resetRouteCount} from "./tripDraftSlice.ts";
 
 interface UserState {
     username: string;
@@ -8,6 +9,7 @@ interface UserState {
     last_name?:string;
     email?:string;
     isAuthenticated: boolean;
+    is_superuser: boolean;
     error?: string | null;
 }
 
@@ -17,6 +19,7 @@ const initialState: UserState = {
     last_name:'',
     email:'',
     isAuthenticated: false,
+    is_superuser: false,
     error: null,
 };
 
@@ -48,7 +51,7 @@ export const loginUserAsync = createAsyncThunk(
 // Асинхронное действие для деавторизации
 export const logoutUserAsync = createAsyncThunk(
     'user/logoutUserAsync',
-    async (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue,dispatch }) => {
         try {
             const response = await api.users.usersDeauthCreate();
             return response.data;
@@ -80,25 +83,28 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(loginUserAsync.fulfilled, (state, action) => {
-                const { username, email, first_name, last_name } = action.payload;
+                const { username, email, first_name, last_name,is_superuser } = action.payload;
                 state.username = username;
                 state.email = email;
                 state.first_name = first_name;
                 state.last_name = last_name;
                 state.isAuthenticated = true;
+                state.is_superuser = is_superuser
                 state.error = null;
             })
             .addCase(loginUserAsync.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.isAuthenticated = false;
+                state.is_superuser = false
             })
 
-            .addCase(logoutUserAsync.fulfilled, (state) => {
+            .addCase(logoutUserAsync.fulfilled, (state,dispatch) => {
                 state.username = '';
                 state.email = '';
                 state.first_name = '';
                 state.last_name = '';
                 state.isAuthenticated = false;
+                state.is_superuser = false
                 state.error = null;
             })
             .addCase(logoutUserAsync.rejected, (state, action) => {

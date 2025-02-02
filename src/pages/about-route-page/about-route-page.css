@@ -35,4 +35,33 @@
     }
 }
 
+.route-attributes {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.route-attribute {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #fff;
+
+}
+
+.route-attribute:last-child {
+    border-bottom: none;
+}
+
+.attribute-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.attribute-value {
+    font-weight: 400;
+    color: #666;
+}
 

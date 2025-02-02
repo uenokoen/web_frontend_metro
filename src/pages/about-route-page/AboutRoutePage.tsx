@@ -1,21 +1,31 @@
 import './about-route-page.css';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { api } from '../../api/';
 import { Container, Spinner } from "react-bootstrap";
 import Breadcrumbs from "../../components/bread crumbs/BreadCrumbs.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store.ts";
-import {getRouteDetails} from "../../../routeSlice.ts";
+import {getRouteAttributes, getRouteDetails} from "../../../routeSlice.ts";
 
 function AboutRoutePage() {
     const { id } = useParams<number>();
     const dispatch = useDispatch();
-    const { selectedRoute, loading, error } = useSelector((state: RootState) => state.routes);
+    const navigate = useNavigate()
+    const { selectedRoute, loading, error, routeAttributes } = useSelector((state: RootState) => state.routes);
 
     useEffect(() => {
-        dispatch(getRouteDetails(id));
-    }, [dispatch, id]);
+        dispatch(getRouteDetails(id))
+            .unwrap()
+            .catch(() => {
+                navigate('/not-found');
+            });
+        dispatch(getRouteAttributes(id))
+            .unwrap()
+            .catch(() => {
+                navigate('/not-found');
+            });
+    }, [dispatch, id,navigate]);
 
     if (loading) {
         return (
@@ -59,11 +69,27 @@ function AboutRoutePage() {
                     <div className="price-badge">
                         <h5 className="fw-medium text-white mb-0">Стоимость: {selectedRoute.price} ₽</h5>
                     </div>
+                    <div className="mt-4">
+                        <h3 className="mb-3">Детали маршрута</h3>
+                        {Object.keys(routeAttributes).length > 0 ? (
+                            <div className="route-attributes">
+                                {Object.entries(routeAttributes).map(([key, attr]) => (
+                                    <div key={key} className="route-attribute">
+                                        <span className="attribute-name">{attr.name}</span>
+                                        <span className="attribute-value">{attr.value || '—'}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>Детали отсутствуют.</p>
+                        )}
+                    </div>
+
                 </div>
             </div>
 
             <div className="justify-content-start">
-                <h3 className="fw-bold text-center mb-3">Подробнее о маршруте</h3>
+                <h3 className="fw-bold text-center mb-3">Описание маршрута</h3>
                 <h5 className="mx-auto text-start recipe-card about-text">
                     {selectedRoute.description}
                 </h5>

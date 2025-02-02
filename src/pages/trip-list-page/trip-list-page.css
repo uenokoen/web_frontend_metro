@@ -1,3 +1,78 @@
 .status {
     width: 100px;
 }
+
+.form-auth {
+    border-radius: 12px;
+    border-color: var(--buttonColor);
+    box-shadow: none;
+}
+
+.form-auth:focus {
+    border-color: var(--buttonColor);
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
+}
+
+.dinner-icon {
+    margin-left: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.status-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Обертка для всплывающего окна с QR-кодом */
+.qr-hover-wrapper {
+    position: relative;
+}
+
+/* Всплывающий блок с QR-кодом */
+.qr-hover {
+    display: none; /* Изначально скрыто */
+    position: absolute; /* Абсолютное позиционирование относительно родителя */
+    top: -100px; /* Верхний край на половине высоты родителя */
+    left: calc(-100% + 50px); /* Левый край смещен на ширину родителя минус 100 пикселей */
+    transform: translateY(-50%) translateX(-80%) scale(1.5);
+    z-index: 10000; /* Высокий уровень z-индекса для вывода поверх других элементов */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    p {
+        font-size: 12px;
+    }
+}
+
+.qr-code {
+    width: 120px;
+    height: 120px;
+}
+
+/* При наведении на иконку QR-код становится видимым */
+.qr-hover-wrapper:hover .qr-hover {
+    display: block;
+}
+
+/* Псевдоэлемент для иконки статуса при наведении */
+.status-icon:hover::after {
+    position: absolute; /* Абсолютное позиционирование */
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%); /* Центрируем по горизонтали */
+    background-color: #fff;
+    color: #333;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+}

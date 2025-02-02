@@ -3,6 +3,12 @@
     height: 40px;
     border-radius: 12px;
     border-color: var(--buttonColor);
+    box-shadow: none;
+}
+
+.search:focus {
+    border-color: var(--buttonColor);
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
 }
 
 .shop {

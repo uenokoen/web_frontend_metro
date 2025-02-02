@@ -39,7 +39,7 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: "/web_frontend_metro/img.png",
+            src: "/web_frontend_metro/403.png",
             sizes: "410x593",
             type: "image/png"
           }
