@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint ../ios2-lab6-adaptive",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "tauri": "tauri"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
@@ -25,6 +26,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@tauri-apps/api": "^2.2.0",
+    "@tauri-apps/cli": "^2.2.7",
     "@types/node": "^22.10.7",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

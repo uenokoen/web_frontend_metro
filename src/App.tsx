@@ -4,11 +4,12 @@ import PromoPage from "./pages/promo page/PromoPage.tsx";
 import RoutePage from "./pages/route-page/RoutePage.tsx";
 import AboutRoutePage from "./pages/about-route-page/AboutRoutePage.tsx";
 import Footer from "./components/footer/Footer.tsx";
+import {dest_root} from "../target_config.ts";
 
 
 function App() {
     return(
-        <BrowserRouter basename="/web_frontend_metro">
+        <BrowserRouter basename={dest_root}>
             <div className="d-flex flex-column min-vh-100">
                 <Header/>
 
