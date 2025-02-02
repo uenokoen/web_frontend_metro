@@ -1,4 +1,4 @@
-import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
+import {Route, Routes, BrowserRouter} from "react-router-dom";
 import Header from "./components/header/Header.tsx";
 import PromoPage from "./pages/promo page/PromoPage.tsx";
 import RoutePage from "./pages/route-page/RoutePage.tsx";
@@ -8,7 +8,7 @@ import Footer from "./components/footer/Footer.tsx";
 
 function App() {
     return(
-        <Router>
+        <BrowserRouter basename="/web_frontend_metro">
             <div className="d-flex flex-column min-vh-100">
                 <Header/>
 
@@ -19,7 +19,7 @@ function App() {
                 </Routes>
                 <Footer/>
             </div>
-        </Router>
+        </BrowserRouter>
     )
 }
 

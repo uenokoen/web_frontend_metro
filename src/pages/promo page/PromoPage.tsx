@@ -13,7 +13,7 @@ function PromoPage() {
             src: trainIcon
         },
         {
-            title: "Достопримечательности",
+            title: "Достояние",
             description: "Исследуйте город с комфортом, посещая ключевые достопримечательности по пути.",
             src: landmarkIcon
         },

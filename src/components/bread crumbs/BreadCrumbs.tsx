@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import './breadcrumbs.css';
+import './breadCrumbs.css';
 import { api } from '../../modules/MetroApi.ts';
 function Breadcrumbs() {
     const { id } = useParams(); // Получаем ID маршрута из URL

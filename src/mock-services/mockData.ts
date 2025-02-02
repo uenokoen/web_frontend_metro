@@ -9,7 +9,7 @@ export const mockRoutes = [
         destination: "Академическая",
         description: "Маршрут проходит через ключевые станции города, включая пересадочные узлы. Это удобный выбор для тех, кто ценит быстрое перемещение по юго-восточной части Москвы.",
         thumbnail: Route1,
-        is_active: "active",
+        is_active: true,
         price: 20,
     },
     {
@@ -18,7 +18,7 @@ export const mockRoutes = [
         destination: "Авиамоторная",
         description: "Этот маршрут соединяет спальные районы с крупными транспортными узлами. Подходит для ежедневных поездок в центр города или на работу.",
         thumbnail: Route2,
-        is_active: "active",
+        is_active: true,
         price: 70,
     },
     {
@@ -27,7 +27,7 @@ export const mockRoutes = [
         destination: "Выхино",
         description: "Маршрут пролегает через исторический центр Москвы, включая Китай-город, и завершает путь в жилом районе Выхино. Идеален для путешествий с культурными целями.",
         thumbnail: Route3,
-        is_active: "active",
+        is_active: true,
         price: 60,
     },
 

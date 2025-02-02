@@ -1,4 +1,4 @@
-import { mockRoutes } from '../mock-services/mockData';
+import { mockRoutes } from '../mock-services/mockData.ts';
 
 const API_PREFIX = '/api/';
 
@@ -19,12 +19,15 @@ interface Route {
 
 export const api = {
 
-    async getRoutes(searchQuery: string = "") {
+    async getRoutes(searchQuery: string = ""): Promise<{ routes: Route[] }> {
         const params: GetRouteParams = {};
         if (searchQuery) {
             params.origin = searchQuery;
         }
-        const queryString = new URLSearchParams(params).toString();
+
+        // Преобразуем все параметры в строковые значения
+        const queryString = new URLSearchParams(params as Record<string, string>).toString();
+
         const url = `${API_PREFIX}routes/?${queryString}`;
         try {
             const response = await fetch(url, {
@@ -36,10 +39,14 @@ export const api = {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const data: Route[] = await response.json();
-            return data;
-        } catch (error) {
-            console.error("Ошибка получения маршрутов с сервера:", error.message);
+            const { routes }: { routes: Route[] } = await response.json();
+            return { routes };
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Ошибка получения маршрутов с сервера:", error.message);
+            } else {
+                console.error("Неизвестная ошибка:", error);
+            }
             console.warn("Возвращаем данные из mock-объектов");
             const filteredMocks = searchQuery
                 ? mockRoutes.filter((item) =>
@@ -64,8 +71,12 @@ export const api = {
             }
             const data = await response.json();
             return data;
-        } catch (error) {
-            console.error("Ошибка получения маршрута с сервера:", error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Ошибка получения маршрута с сервера:", error.message);
+            } else {
+                console.error("Неизвестная ошибка:", error);
+            }
             console.warn("Возвращаем данные из mock-объектов для ингредиента");
             const route = mockRoutes.find((item) => item.id === parseInt(id));
             return route || null;

@@ -22,3 +22,43 @@
 .route-card:hover {
     transform: translateY(-5px);
 }
+
+/* Адаптивность для планшетов (ширина от 768px до 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .promo-page {
+        padding: 40px 15px;
+    }
+
+    .promo-header p {
+        max-width: 500px;
+    }
+
+    .route-card {
+        width: 250px;
+        height: 250px;
+    }
+
+
+}
+
+/* Адаптивность для телефонов (ширина до 768px) */
+@media (max-width: 768px) {
+    .promo-page {
+        padding: 30px 10px;
+    }
+
+    .promo-header h1 {
+        font-size: 24px;
+    }
+
+    .promo-header p {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    .route-card {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+}

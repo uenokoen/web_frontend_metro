@@ -56,8 +56,77 @@
 }
 
 
-@media (max-width: 992px) {
-    .menu-item {
-        font-size: 16px; /* Уменьшаем текст для мобильных */
+/* Мобильное меню */
+@media (max-width: 1024px) {
+    .menu-toggle {
+        display: block; /* Показываем бургер-меню только на маленьких экранах */
     }
+
+    .d-lg-none {
+        display: block !important;
+    }
+
+    .d-lg-flex {
+        display: none !important;
+    }
+}
+
+/* Для больших экранов (1024px и выше) */
+@media (min-width: 1025px) {
+    .menu-toggle {
+        display: none; /* Скрываем бургер-меню */
+    }
+}
+
+
+/* Стили для мобильного меню */
+.mobile-menu {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 80px);
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    z-index: 9999;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+
+.mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--buttonColor);
+    cursor: pointer;
+    z-index: 1000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.menu-content a {
+    font-size: 20px; /* Крупный текст */
+    font-weight: bold;
+    color: var(--buttonColor);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.menu-content a:hover {
+    color: var(--buttonColor);
 }

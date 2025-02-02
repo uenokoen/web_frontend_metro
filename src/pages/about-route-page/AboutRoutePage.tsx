@@ -5,17 +5,28 @@ import { api } from '../../modules/MetroApi.ts';
 import { Container, Spinner } from "react-bootstrap";
 import Breadcrumbs from "../../components/bread crumbs/BreadCrumbs.tsx";
 
+interface Route {
+    id: number;
+    origin: string;
+    destination: string;
+    description: string;
+    is_active: boolean;
+    thumbnail?: string;
+    price: number;
+}
+
 function AboutRoutePage() {
-    const { id } = useParams<number>(); // Извлекаем id из URL
-    const [route, setRoute] = useState(null); // Заменили на route
+    const { id } = useParams<string>(); // Извлекаем id из URL
+    const [route, setRoute] = useState<Route | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchRoute = async () => { // Заменили fetchIngredient на fetchRoute
+        const fetchRoute = async () => {
+            if (!id) return;
             try {
-                const data = await api.getRoute(id); // Поменяли на getRoute (если это метод получения данных маршрута)
-                setRoute(data); // Устанавливаем данные маршрута
+                const data = await api.getRoute(id);
+                setRoute(data);
             } catch (err) {
                 console.error("Ошибка загрузки маршрута:", err);
                 setError("Не удалось загрузить данные о маршруте");
@@ -47,12 +58,12 @@ function AboutRoutePage() {
     if (!route) { // Поменяли на route
         return (
             <Container className="py-5 text-center">
-                <p>Маршрут не найден</p> {/* Поменяли на "Маршрут" */}
+                <p>Маршрут не найден</p>
             </Container>
         );
     }
 
-    const imageUrl = route.thumbnail; // Поменяли на route
+    const imageUrl = route.thumbnail;
     return (
         <Container className="py-5">
             <Breadcrumbs />
@@ -60,7 +71,7 @@ function AboutRoutePage() {
                 <div className="col-md-6">
                     <img
                         src={imageUrl}
-                        alt={route.origin} // Поменяли на route.origin (можно поменять на более подходящее название)
+                        alt={route.origin}
                         className="img-fluid"
                     />
                 </div>

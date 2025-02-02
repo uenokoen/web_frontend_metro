@@ -1,17 +1,24 @@
 import './search.css';
 import { Button, Container, Form } from "react-bootstrap";
 import SearchImg from '../../assets/search.svg';
-import { useState } from 'react'; // Импортируем useState
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchRouteTerm } from '../../../searchSlice.ts';
 
-function Search({ onSearch }) {
-    const [searchTerm, setSearchTerm] = useState(''); // Локальное состояние для текста поиска
+interface SearchProps {
+    onSearch: (query: string) => void;
+}
 
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value); // Сохраняем значение поля поиска
+function Search({ onSearch }: SearchProps) {
+    const searchTerm = useSelector((state: any) => state.search.searchRouteTerm);
+    const dispatch = useDispatch();
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        dispatch(setSearchRouteTerm(value));
     };
 
     const handleSubmit = () => {
-        onSearch(searchTerm); // Передаём значение после нажатия кнопки
+        onSearch(searchTerm);
     };
 
     return (
@@ -20,13 +27,13 @@ function Search({ onSearch }) {
                 type="text"
                 placeholder="Поиск маршрута..."
                 className="search"
-                value={searchTerm} // Управляем значением поля
-                onChange={handleSearch} // Обновляем состояние при изменении текста
+                value={searchTerm}
+                onChange={handleSearch}
             />
             <Button
                 variant="danger"
                 className="custom-button-shop"
-                onClick={handleSubmit} // Фильтрация будет происходить только по клику на кнопку
+                onClick={handleSubmit}
             >
                 <img src={SearchImg} className="w-100" alt="SearchImg" />
             </Button>

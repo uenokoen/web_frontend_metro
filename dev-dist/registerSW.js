@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/ios2/dev-sw.js?dev-sw', { scope: '/ios2/', type: 'classic' })

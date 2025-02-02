@@ -3,7 +3,16 @@ import {Button, Card} from "react-bootstrap";
 import {motion} from "framer-motion";
 import {Link} from "react-router-dom";
 
-function RouteCard({route}) {
+interface Route {
+    id: number;
+    origin: string;
+    destination: string;
+    description: string;
+    is_active: boolean;
+    thumbnail?: string;
+    price: number;
+}
+function RouteCard({route}: { route: Route }) {
     return (
         <motion.div
             className={"card-wrapper"}
@@ -21,7 +30,7 @@ function RouteCard({route}) {
                     </Card.Title>
                     <div className="d-flex justify-content-between flex-row align-items-center">
                         <h6>Стоимоcть: {route.price} ₽</h6>
-                        <Button variant={'danger'} className={'custom-button'} as={Link} to={`/routes/${route.id}`}>
+                        <Button variant={'danger'} className={'custom-button'} as={Link as any} to={`/routes/${route.id}`}>
                             Подробнее
                         </Button>
                     </div>
