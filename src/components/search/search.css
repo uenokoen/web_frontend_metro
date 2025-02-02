@@ -5,6 +5,38 @@
     border-color: var(--buttonColor);
 }
 
+.shop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-wrapper {
+    display: grid;
+    position: relative; /* Используем для позиционирования бейджа */
+}
+
+.custom-button-shop {
+    display: block; /* Кнопка остается основным элементом */
+}
+
+.badge {
+
+    background-color: #ad2831;
+    color: white;
+    border-radius: 50%;
+    min-width: 24px; /* Минимальный размер для корректного отображения текста */
+    height: 24px;
+    padding: 2px; /* Добавляем внутренние отступы */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap; /* Предотвращаем перенос текста */
+}
+
+
 @media (max-width: 576px) { /* Адаптация для телефонов */
     .search {
         width: 100%; /* Полная ширина для телефонов */

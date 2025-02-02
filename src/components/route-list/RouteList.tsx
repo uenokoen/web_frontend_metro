@@ -1,16 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap";
 import RouteCard from "../route-card/RouteCard.tsx";
-import { useEffect, useState } from "react";
-import Search from "../search/Search.tsx";
-import { api } from '../../modules/MetroApi.ts';
+import React, { useEffect, useState } from "react";
+import Search from "../search/Search";
 import Breadcrumbs from "../bread crumbs/BreadCrumbs.tsx";
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchRouteTerm } from '../../../searchSlice.ts';
+import {getRoutesList, setSearchRouteTerm} from '../../../routeSlice.ts';
 import emptySearch from '../../assets/emptySearch.jpg'
 import Skeleton from 'react-loading-skeleton'; // Импортируем компонент Skeleton
-import 'react-loading-skeleton/dist/skeleton.css'; // Импорт стилей для Skeleton
+import 'react-loading-skeleton/dist/skeleton.css';
+import {AppDispatch, RootState} from "../../../store.ts";
+import {deleteTrip, setError} from "../../../tripDraftSlice.ts"; // Импорт стилей для Skeleton
 
-interface Route {
+export interface Route {
     id: number;
     origin: string;
     destination: string;
@@ -21,42 +22,21 @@ interface Route {
 }
 
 function RouteList() {
-    const [routes, setRoutes] = useState<Route[] | []>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const searchQuery = useSelector((state: any) => state.search.searchRouteTerm);
-    const dispatch = useDispatch(); // Инициализация dispatch
+    const dispatch = useDispatch<AppDispatch>();
+    const { searchRouteTerm, routes, loading, error } = useSelector((state: RootState) => state.routes);
 
     useEffect(() => {
-        const fetchRoutes = async () => {
-            try {
-                const data = await api.getRoutes(searchQuery);
-                console.log(data);
-                setRoutes(data.routes);
-            } catch (err: any) {
-                console.error(err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRoutes();
-    }, [searchQuery]);
-
-    const handleSearch = (query: string) => {
-        dispatch(setSearchRouteTerm(query));
-    };
+        dispatch(getRoutesList());
+    }, [dispatch]);
 
     return (
         <Container className="mb-5">
-            <Search onSearch={handleSearch} />
+            <Search value={searchRouteTerm} />
             <div className="mt-3 mb-3">
                 <Breadcrumbs />
             </div>
             <Row className="g-4 justify-content-center">
                 {loading ? (
-                    // Заменяем "Загрузка..." на скелетоны
                     Array.from({ length: 6 }).map((_, index) => (
                         <Col
                             key={index}

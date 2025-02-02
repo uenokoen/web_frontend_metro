@@ -1,8 +1,12 @@
 import './header.css';
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {useEffect, useState} from 'react';
+import {AppDispatch, RootState} from "../../../store.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {logoutUserAsync} from "../../../userSlice.ts";
+import {getRoutesList, setSearchRouteTerm} from "../../../routeSlice.ts";
 
 function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +14,21 @@ function Header() {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const isAuthenticated = useSelector((state: RootState) => state.users.isAuthenticated);
+    const username = useSelector((state: RootState) => state.users.username);
+    const email = useSelector((state: RootState) => state.users.email);
+    const last_name = useSelector((state: RootState) => state.users.last_name);
+    const first_name = useSelector((state: RootState) => state.users.first_name);
+    const handleExit = async ()  => {
+        await dispatch(logoutUserAsync());
+        dispatch(setSearchRouteTerm(''));
+        navigate('/routes'); // переход на страницу списка услуг
+        await dispatch(getRoutesList()); // для показа очищения поля поиска
+    }
+
     useEffect(() => {
         if (isMenuOpen) {
             document.body.style.overflow = 'hidden'; // Блокировка прокрутки
@@ -48,9 +67,37 @@ function Header() {
                     {/* Для экранов больше 1024px отображаем только ссылки меню */}
                     <div className="d-none d-lg-flex align-items-center">
                         <Nav className="flex-row gap-3">
+                            {(isAuthenticated == true) && (
+                                <Nav.Link as={Link} to={"/user"}
+                                          state={{ username, email, last_name, first_name }}
+                                    >
+                                    {username}
+                                </Nav.Link>
+                            )}
                             <Nav.Link as={Link} to="/routes">
                                 Маршруты
                             </Nav.Link>
+                            {(isAuthenticated == true) && (
+                                <Nav.Link as={Link} to="/trips">
+                                    Поездки
+                                </Nav.Link>
+                            )}
+                            {(isAuthenticated == false ) && (
+                            <Nav.Link as={Link} to="/login">
+                                Войти
+                            </Nav.Link>
+                            )}
+                            {(isAuthenticated == false ) && (
+                                <Nav.Link as={Link} to="/reg">
+                                    Регистрация
+                                </Nav.Link>
+                            )}
+                            {(isAuthenticated == true) && (
+                                <Nav.Link as={Link} to="/login" onClick={ handleExit }>
+                                    Выйти
+                                </Nav.Link>
+                            )}
+
                         </Nav>
                     </div>
 
@@ -101,6 +148,20 @@ function Header() {
                         <Nav.Link as={Link} to="/routes" onClick={toggleMenu}>
                             Маршруты
                         </Nav.Link>
+                        {(isAuthenticated == false ) &&  (
+                            <Nav.Link as={Link} to="/login" onClick={toggleMenu}>
+                                Войти
+                            </Nav.Link>
+                        )}
+                        {(isAuthenticated == true) && (
+                            <Nav.Link as={Link} to="/login" onClick={() => {
+                                toggleMenu();
+                                handleExit();
+                            }}>
+                                Выйти
+                            </Nav.Link>
+                        )}
+
                     </Nav>
                 </motion.div>
             </motion.div>

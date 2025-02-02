@@ -14,6 +14,15 @@
     border-radius: 12px;
     border: none;
 }
+
+.custom-button-save{
+    background: white;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--buttonColor);
+    border-radius: 12px;
+    border-color: var(--buttonColor);
+}
 .custom-button-shop{
     background: var(--buttonColor);
     font-weight: bold;

@@ -1,5 +1,6 @@
 import { mockRoutes } from '../mock-services/mockData';
-import {dest_api} from "../../target_config.ts";
+
+const API_PREFIX = '/api/';
 
 interface GetRouteParams {
     origin?: string;
@@ -27,7 +28,7 @@ export const api = {
         // Преобразуем все параметры в строковые значения
         const queryString = new URLSearchParams(params as Record<string, string>).toString();
 
-        const url = `${dest_api}/routes/?${queryString}`;
+        const url = `${API_PREFIX}routes/?${queryString}`;
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -57,7 +58,7 @@ export const api = {
     },
 
     async getRoute(id: string) {
-        const url = `${dest_api}/routes/${id}/`;
+        const url = `${API_PREFIX}routes/${id}/`;
         try {
             const response = await fetch(url, {
                 method: 'GET',

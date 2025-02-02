@@ -1,42 +1,21 @@
 import './about-route-page.css';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { api } from '../../modules/MetroApi.ts';
+import { api } from '../../api/';
 import { Container, Spinner } from "react-bootstrap";
 import Breadcrumbs from "../../components/bread crumbs/BreadCrumbs.tsx";
-
-interface Route {
-    id: number;
-    origin: string;
-    destination: string;
-    description: string;
-    is_active: boolean;
-    thumbnail?: string;
-    price: number;
-}
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../store.ts";
+import {getRouteDetails} from "../../../routeSlice.ts";
 
 function AboutRoutePage() {
-    const { id } = useParams<string>(); // Извлекаем id из URL
-    const [route, setRoute] = useState<Route | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { id } = useParams<number>();
+    const dispatch = useDispatch();
+    const { selectedRoute, loading, error } = useSelector((state: RootState) => state.routes);
 
     useEffect(() => {
-        const fetchRoute = async () => {
-            if (!id) return;
-            try {
-                const data = await api.getRoute(id);
-                setRoute(data);
-            } catch (err) {
-                console.error("Ошибка загрузки маршрута:", err);
-                setError("Не удалось загрузить данные о маршруте");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRoute();
-    }, [id]);
+        dispatch(getRouteDetails(id));
+    }, [dispatch, id]);
 
     if (loading) {
         return (
@@ -55,7 +34,7 @@ function AboutRoutePage() {
         );
     }
 
-    if (!route) { // Поменяли на route
+    if (!selectedRoute) { // Поменяли на route
         return (
             <Container className="py-5 text-center">
                 <p>Маршрут не найден</p>
@@ -63,7 +42,7 @@ function AboutRoutePage() {
         );
     }
 
-    const imageUrl = route.thumbnail;
+    const imageUrl = selectedRoute.thumbnail;
     return (
         <Container className="py-5">
             <Breadcrumbs />
@@ -71,14 +50,14 @@ function AboutRoutePage() {
                 <div className="col-md-6">
                     <img
                         src={imageUrl}
-                        alt={route.origin}
+                        alt={selectedRoute.origin}
                         className="img-fluid"
                     />
                 </div>
                 <div className="col-md-6 mt-3">
-                    <h2 className="mb-3 fw-bold ">{route.origin} - {route.destination}</h2>
+                    <h2 className="mb-3 fw-bold ">{selectedRoute.origin} - {selectedRoute.destination}</h2>
                     <div className="price-badge">
-                        <h5 className="fw-medium text-white mb-0">Стоимость: {route.price} ₽</h5>
+                        <h5 className="fw-medium text-white mb-0">Стоимость: {selectedRoute.price} ₽</h5>
                     </div>
                 </div>
             </div>
@@ -86,7 +65,7 @@ function AboutRoutePage() {
             <div className="justify-content-start">
                 <h3 className="fw-bold text-center mb-3">Подробнее о маршруте</h3>
                 <h5 className="mx-auto text-start recipe-card about-text">
-                    {route.description}
+                    {selectedRoute.description}
                 </h5>
             </div>
         </Container>

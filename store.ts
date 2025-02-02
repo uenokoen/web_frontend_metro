@@ -1,10 +1,15 @@
 
 import { configureStore } from '@reduxjs/toolkit';
-import searchReducer from './searchSlice.ts';
-
+import routes from './routeSlice.ts';
+import user from './userSlice.ts'
+import tripDraft from './tripDraftSlice.ts'
+import trips from './tripsSlice.ts'
 const store = configureStore({
     reducer: {
-        search: searchReducer,
+        routes: routes,
+        users: user,
+        tripDraft: tripDraft,
+        trips: trips,
     },
 });
 
